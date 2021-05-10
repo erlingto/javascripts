@@ -11,9 +11,19 @@
 }
 
 .grid-item {
+    cursor: pointer;
     width:  1em;
     height: 1em;
     padding: 1em;
     border: 1px solid #ddd;
     text-align: center;
+    background-color: rgb(255, 255, 255);
+
 }
+.btn {
+    background-color: gray;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+  }
