@@ -1,24 +1,46 @@
 const container = document.getElementById("grid");
 const btn = document.getElementById("button");
+function heuristic(node, end){
+  xend = Math.floor(end / 16);
+  yend = end % xend;
+
+  xnode = Math.floor(node / 16);
+  ynode = node % xend;
+
+
+  out = Math.abs(xend-xnode) + Math.abs(ynode-yend);
+  return out
+}
+function arrayRemove(arr, value) { 
+  return arr.filter(function(ele){ 
+      return ele != value; 
+  });
+}
+
+function reset_path(){
+  if (path.length > 0){
+    for (var i = 0; i <path.length; i++){
+      node = path[i]
+      strnr = String(node);
+      el  = document.getElementById(strnr);
+      el.style.backgroundColor = "rgb(255, 255, 255)";
+    }
+  }
+}
 function reset(){
-  matrice[container.end[0], container.end[1]] = 0;
-  matrice[container.start[1], container.start[1]] = 0;
   var nr = container.end[0] * 16 + container.end[1];
   var strnr = String(nr);
   el  = document.getElementById(strnr);
-  el.value = matrice[container.end[0], container.end[1]];
   el.style.backgroundColor = "rgb(255, 255, 255)";
   nr = container.start[0] * 16 + container.start[1];
   strnr = String(nr);
   el  = document.getElementById(strnr);
-  el.value = matrice[container.start[0], container.start[1]];
   el.style.backgroundColor = "rgb(255, 255, 255)";
 }
 function show(){
   var nr = container.end[0] * 16 + container.end[1];
   var strnr = String(nr);
   el  = document.getElementById(strnr);
-  el.value = matrice[container.end[0], container.end[1]];
   
   el.style.backgroundColor = "rgb(32, 126, 150)";
   nr = container.start[0] * 16 + container.start[1];
@@ -29,33 +51,122 @@ function show(){
 }
 
 function astar(){
+  startCord = container.start[0] * 16 + container.start[1];
+  endCord = container.end[0] * 16 + container.end[1];
   strt = String(container.end[0] * 16 + container.end[1]);
   endt = String(container.start[0] * 16 + container.start[1]);
   el  = document.getElementById(strt);
   el.style.backgroundColor = "rgb(1, 109, 1)";
   el  = document.getElementById(endt);
   el.style.backgroundColor = "rgb(34, 252, 34)";
+
+
+  var f = [];
+  var g = [];
+  var h = [];
+  var parent = [];
+
+  for (var i = 0; i < 16*16; i++){
+    f[i] = 0;
+    g[i] = 0;
+    h[i] = 0;
+    parent[i] = undefined;
+  }
+
+
+  var openList = [];
+  var closedList = [];
+  openList.push(startCord);
+
+
+  while(openList.length > 0 ) {
+ 
+    // Grab the lowest f(x) to process next
+    var lowInd = 0;
+    for(var i=0; i<openList.length; i++) {
+      if(f[openList[i]] < f[openList[lowInd]]) { lowInd = i; }
+    }
+    var currentNode = openList[lowInd];
+
+    // End case -- result has been found, return the traced path
+    if(currentNode == endCord) {
+      var curr = currentNode;
+      var ret = [];
+      while(parent[curr] != undefined) {
+        ret.push(curr);
+        curr = parent[curr];
+        console.log(curr);
+        console.log(parent[curr]);
+      }
+      return ret.reverse();
+    }
+    openList = arrayRemove(openList, currentNode);
+    closedList.push(currentNode);
+    var neighbors = neighbours[currentNode];
+    for (var i=0; i<neighbors.length; i++){
+      var neighbor = neighbors[i];
+      if (closedList.includes(neighbor) || matrice[neighbor] == -1){
+        continue;
+      }
+      var gScore = g[currentNode] + 1;
+      var gScoreIsBest = false;
+      if (!openList.includes(neighbor)){
+        gScoreIsBest = true;
+        h[neighbor] = heuristic(neighbor, endCord);
+        openList.push(neighbor);
+      }
+      else if (gScore < g[neighbor]){
+        gScoreIsBest = true;
+      }
+
+      if (gScoreIsBest){
+        parent[neighbor] = currentNode;
+        g[neighbor] = gScore;
+        f[neighbor] = g[neighbor] + h[neighbor];
+      }
+    }
+  }
 }
 const walls = 10;
 const matrice = [];
-    for(var i=0; i<16; i++) {
-      matrice[i] = [];
-      for(var j=0; j<16; j++) {
-          if (Math.random() < 0.2){
-            matrice[i][j] = -1;
-          }
-          else{
-          matrice[i][j] = 0;
-          }
+const neighbours = [];
+  for(var i=0; i<16; i++) {
+    for(var j=0; j<16; j++) {
+      neighbours[i* 16 + j] = [];
+      if (i != 0){
+        neighbours[i*16+j].push((i-1)*16 + j)
       }
+      if (j != 0){
+        neighbours[i*16+j].push((i)*16 + j-1)
+      }
+      if (i != 15){
+        neighbours[i*16+j].push((i+1)*16 + j)
+      }
+      if (j != 15){
+        neighbours[i*16+j].push((i)*16 + j+1)
+      }
+      if (Math.random() < 0.2){
+        matrice[i*16+j] = -1;
+      }
+      else{
+      matrice[i*16+j] = 0;
+      }
+    }
 function start(){
   if (container.end == undefined){
     return 0
   }
   else{
-    matrice[container.end[0], container.end[1]] = 20;
-    matrice[container.start[1], container.start[1]] = 20;
-    astar()
+    path = astar();
+    console.log(path);
+    console.log(parent[16]);
+    console.log(parent[17]);
+    for (var i = 0; i < path.length-1; i++){
+      nr = path[i];
+      var strnr = String(nr);
+      el  = document.getElementById(strnr);
+      el.style.backgroundColor = "rgb(34, 126, 150)";
+    }
   }
 }
 
@@ -78,6 +189,7 @@ function update(evt){
     item.style.backgroundColor ="rgb(32, 126, 150)";
     container.value = 2;
     container.start = [item.x, item.y];
+    reset_path();
     return 0
   }
   else if(container.value == 1) {
@@ -90,8 +202,6 @@ function update(evt){
     item.value = container.value;
     container.value = 3;
     container.end = [item.x, item.y];
-    matrice[container.end[0], container.end[1]] = 10;
-    matrice[container.start[1], container.start[1]] = 10;
     show()
   }
   }
@@ -106,9 +216,9 @@ function makeRows(rows, cols) {
   for (c = 0; c < rows; c++) {
       for (i = 0; i< cols; i++){
         let cell = document.createElement("div");
-        cell.value = matrice[c][i];
         cell.x = c;
         cell.y = i;
+        cell.value = matrice[c*16 + i];
         cell.id = c * 16 + i;
         if (cell.value == -1){
           cell.style.backgroundColor = "rgb(0,0,0)";
