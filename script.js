@@ -157,6 +157,7 @@ function start(){
     return 0
   }
   else{
+    reset_path();
     path = astar();
     console.log(path);
     console.log(parent[16]);
