@@ -5,7 +5,7 @@ function heuristic(node, end){
   yend = end % xend;
 
   xnode = Math.floor(node / 16);
-  ynode = node % xend;
+  ynode = node % xnode;
 
 
   out = Math.abs(xend-xnode) + Math.abs(ynode-yend);
