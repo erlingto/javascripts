@@ -1,5 +1,6 @@
 const container = document.getElementById("grid");
 const btn = document.getElementById("button");
+var path = [];
 function heuristic(node, end){
   xend = Math.floor(end / 16);
   yend = end % xend;
@@ -95,8 +96,6 @@ function astar(){
       while(parent[curr] != undefined) {
         ret.push(curr);
         curr = parent[curr];
-        console.log(curr);
-        console.log(parent[curr]);
       }
       return ret.reverse();
     }
@@ -157,11 +156,7 @@ function start(){
     return 0
   }
   else{
-    reset_path();
     path = astar();
-    console.log(path);
-    console.log(parent[16]);
-    console.log(parent[17]);
     for (var i = 0; i < path.length-1; i++){
       nr = path[i];
       var strnr = String(nr);
@@ -203,7 +198,8 @@ function update(evt){
     item.value = container.value;
     container.value = 3;
     container.end = [item.x, item.y];
-    show()
+    reset_path();
+    show();
   }
   }
 }
