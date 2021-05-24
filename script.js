@@ -1,6 +1,69 @@
 const container = document.getElementById("grid");
 const btn = document.getElementById("button");
 var path = [];
+
+const matrice = [];
+const neighbours = [];
+
+for(var i=0; i<16; i++) {
+  for(var j=0; j<16; j++) {
+    neighbours[i* 16 + j] = [];
+    if (i != 0){
+      neighbours[i*16+j].push((i-1)*16 + j);
+    }
+    if (j != 0){
+      neighbours[i*16+j].push((i)*16 + j-1);
+    }
+    if (i != 15){
+      neighbours[i*16+j].push((i+1)*16 + j);
+    }
+    if (j != 15){
+      neighbours[i*16+j].push((i)*16 + j+1);
+    }
+    if (Math.random() < 0.2){
+      matrice[i*16+j] = -1;
+    }
+    else if (Math.random() > 0.7){
+      matrice[i*16+j] = 5;
+    }
+    else{
+    matrice[i*16+j] = 1;
+    }
+  }
+}
+  var portal1 = Math.floor(Math.random() * 16 * 16);
+  var portal2 = Math.floor(Math.random() * 16 * 16);
+  while (portal1 == portal2){
+    portal2 = math.floor(Math.random() * 16 * 16);
+  }
+  matrice[portal1] = 1;
+  matrice[portal2] = 1;
+  if (!neighbours[portal1].includes(portal2)){
+    neighbours[portal1].push(portal2);
+    neighbours[portal2].push(portal1);
+  }
+
+
+function portal_heuristic(node, end){
+
+  xend = Math.floor(end / 16);
+  yend = end % 16;
+
+  xnode = Math.floor(node / 16);
+  ynode = node % 16;
+
+  xportal1 = Math.floor(portal1 / 16);
+  yportal1 = end % 16;
+
+  xportal2 = Math.floor(portal2 / 16);
+  yportal2 = end % 16;
+
+  distance1 = Math.abs(xportal1-xnode) + Math.abs(yportal1-ynode) + Math.abs(xend-xportal2) + Math.abs(yend-yportal2);
+  distance2 = Math.abs(xportal2-xnode) + Math.abs(yportal2-ynode) + Math.abs(xend-xportal1) + Math.abs(yend-yportal1);
+
+  return Math.min(distance1, distance2)
+}
+
 function heuristic(node, end){
   xend = Math.floor(end / 16);
   yend = end % 16;
@@ -8,8 +71,9 @@ function heuristic(node, end){
   xnode = Math.floor(node / 16);
   ynode = node % 16;
   
-
+  h_portal = portal_heuristic(node, end);
   out = Math.abs(xend-xnode) + Math.abs(yend-ynode);
+  out = Math.min(h_portal, out);
   return out
 }
 function arrayRemove(arr, value) { 
@@ -44,6 +108,10 @@ function reset_grid(){
     }
     else if (matrice[i]== 5){
       el.style.backgroundColor = "rgb(150, 150, 150)";
+      el.innerText = "";
+    }
+    if (i == portal1 || i == portal2){
+      el.style.backgroundColor= "rgb(255,105,180)";
       el.innerText = "";
     }
   }
@@ -146,33 +214,6 @@ function astar(){
     }
   }
 }
-const matrice = [];
-const neighbours = [];
-  for(var i=0; i<16; i++) {
-    for(var j=0; j<16; j++) {
-      neighbours[i* 16 + j] = [];
-      if (i != 0){
-        neighbours[i*16+j].push((i-1)*16 + j)
-      }
-      if (j != 0){
-        neighbours[i*16+j].push((i)*16 + j-1)
-      }
-      if (i != 15){
-        neighbours[i*16+j].push((i+1)*16 + j)
-      }
-      if (j != 15){
-        neighbours[i*16+j].push((i)*16 + j+1)
-      }
-      if (Math.random() < 0.2){
-        matrice[i*16+j] = -1;
-      }
-      else if (Math.random() > 0.7){
-        matrice[i*16+j] = 5;
-      }
-      else{
-      matrice[i*16+j] = 1;
-      }
-    }
 function start(){
   if (container.end == undefined){
     return 0
@@ -192,6 +233,10 @@ function start(){
       else{
         el.style.backgroundColor = "rgb(108, 135, 99)";
       }
+      if (nr == portal1 || nr == portal2){
+        console.log("true");
+        el.style.backgroundColor= "rgb(255,155,180)";
+      }
       el.innerText = String(g[nr]);
 
     }
@@ -200,6 +245,10 @@ function start(){
       var strnr = String(nr);
       el  = document.getElementById(strnr);
       el.style.backgroundColor = "rgb(34, 126, 150)";
+      if (nr == portal1 || nr == portal2){
+        console.log("true");
+        el.style.backgroundColor= "rgb(255,155,230)";
+      }
     }
   }
 }
@@ -239,8 +288,8 @@ function update(evt){
     reset_grid();
     show();
   }
-  }
 }
+
 
 function makeRows(rows, cols) {
   container.style.setProperty('--grid-rows', rows);
@@ -269,6 +318,12 @@ function makeRows(rows, cols) {
         container.appendChild(cell).className = "grid-item";
       }
     };
+    strnr = String(portal1);
+    el  = document.getElementById(strnr);
+    el.style.backgroundColor= "rgb(255,105,180)";
+    strnr = String(portal2);
+    el  = document.getElementById(strnr);
+    el.style.backgroundColor= "rgb(255,105,180)";
 };
 
 
