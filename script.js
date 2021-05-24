@@ -42,7 +42,7 @@ function reset_grid(){
       el.style.backgroundColor = "rgb(255, 255, 255)";
       el.innerText = "";
     }
-    else if (matrice[i]== 3){
+    else if (matrice[i]== 5){
       el.style.backgroundColor = "rgb(150, 150, 150)";
       el.innerText = "";
     }
@@ -167,7 +167,7 @@ const neighbours = [];
         matrice[i*16+j] = -1;
       }
       else if (Math.random() > 0.7){
-        matrice[i*16+j] = 3;
+        matrice[i*16+j] = 5;
       }
       else{
       matrice[i*16+j] = 1;
@@ -258,7 +258,7 @@ function makeRows(rows, cols) {
         if (cell.value == -1){
           cell.style.backgroundColor = "rgb(0,0,0)";
         }
-        else if (cell.value == 3){
+        else if (cell.value == 5){
           cell.style.backgroundColor = "rgb(150,150,150)";
         }
         //cell.innerText = String(cell.value);
