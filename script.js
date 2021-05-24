@@ -127,7 +127,7 @@ function astar(){
       if (closedList.includes(neighbor) || matrice[neighbor] == -1){
         continue;
       }
-      var gScore = g[currentNode] + matrice[currentNode];
+      var gScore = g[currentNode] + matrice[neighbor];
       var gScoreIsBest = false;
       if (!openList.includes(neighbor)){
         gScoreIsBest = true;
