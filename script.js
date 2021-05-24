@@ -3,13 +3,13 @@ const btn = document.getElementById("button");
 var path = [];
 function heuristic(node, end){
   xend = Math.floor(end / 16);
-  yend = end % xend;
+  yend = end % 16;
 
   xnode = Math.floor(node / 16);
-  ynode = node % xnode;
+  ynode = node % 16;
+  
 
-
-  out = Math.abs(xend-xnode) + Math.abs(ynode-yend);
+  out = Math.abs(xend-xnode) + Math.abs(yend-ynode);
   return out
 }
 function arrayRemove(arr, value) { 
@@ -28,23 +28,43 @@ function reset_path(){
     }
   }
 }
+function reset_grid(){
+  for (var i = 0; i < 16*16; i++){
+    strnr = String(i);
+    if (container.end == i){
+      continue;
+    }
+    if (container.start == i){
+      continue;
+    }
+    el  = document.getElementById(strnr);
+    if (matrice[i]==1){
+      el.style.backgroundColor = "rgb(255, 255, 255)";
+      el.innerText = "";
+    }
+    else if (matrice[i]== 3){
+      el.style.backgroundColor = "rgb(150, 150, 150)";
+      el.innerText = "";
+    }
+  }
+}
 function reset(){
-  var nr = container.end[0] * 16 + container.end[1];
+  var nr = container.end;
   var strnr = String(nr);
   el  = document.getElementById(strnr);
   el.style.backgroundColor = "rgb(255, 255, 255)";
-  nr = container.start[0] * 16 + container.start[1];
+  nr = container.start;
   strnr = String(nr);
   el  = document.getElementById(strnr);
   el.style.backgroundColor = "rgb(255, 255, 255)";
 }
 function show(){
-  var nr = container.end[0] * 16 + container.end[1];
+  var nr = container.end;
   var strnr = String(nr);
   el  = document.getElementById(strnr);
   
   el.style.backgroundColor = "rgb(32, 126, 150)";
-  nr = container.start[0] * 16 + container.start[1];
+  nr = container.start;
   strnr = String(nr);
   el  = document.getElementById(strnr);
   
@@ -52,14 +72,14 @@ function show(){
 }
 
 function astar(){
-  startCord = container.start[0] * 16 + container.start[1];
-  endCord = container.end[0] * 16 + container.end[1];
-  strt = String(container.end[0] * 16 + container.end[1]);
-  endt = String(container.start[0] * 16 + container.start[1]);
+  startCord = container.start;
+  endCord = container.end;
+  strt = String(container.end);
+  endt = String(container.start);
   el  = document.getElementById(strt);
   el.style.backgroundColor = "rgb(1, 109, 1)";
   el  = document.getElementById(endt);
-  el.style.backgroundColor = "rgb(34, 252, 34)";
+  el.style.backgroundColor = "rgb(1, 109, 1)";
 
 
   var f = [];
@@ -97,7 +117,7 @@ function astar(){
         ret.push(curr);
         curr = parent[curr];
       }
-      return ret.reverse();
+      return [ret.reverse(), closedList, g, h, f];
     }
     openList = arrayRemove(openList, currentNode);
     closedList.push(currentNode);
@@ -107,7 +127,7 @@ function astar(){
       if (closedList.includes(neighbor) || matrice[neighbor] == -1){
         continue;
       }
-      var gScore = g[currentNode] + 1;
+      var gScore = g[currentNode] + matrice[currentNode];
       var gScoreIsBest = false;
       if (!openList.includes(neighbor)){
         gScoreIsBest = true;
@@ -126,7 +146,6 @@ function astar(){
     }
   }
 }
-const walls = 10;
 const matrice = [];
 const neighbours = [];
   for(var i=0; i<16; i++) {
@@ -147,8 +166,11 @@ const neighbours = [];
       if (Math.random() < 0.2){
         matrice[i*16+j] = -1;
       }
+      else if (Math.random() > 0.7){
+        matrice[i*16+j] = 3;
+      }
       else{
-      matrice[i*16+j] = 0;
+      matrice[i*16+j] = 1;
       }
     }
 function start(){
@@ -156,7 +178,23 @@ function start(){
     return 0
   }
   else{
-    path = astar();
+    arrays = astar();
+    path = arrays[0];
+    closedList = arrays[1];
+    g = arrays[2]; 
+    for (var i = 1; i < closedList.length; i++){
+      nr = closedList[i];
+      var strnr = String(nr);
+      el  = document.getElementById(strnr);
+      if (matrice[nr] == 1){
+        el.style.backgroundColor = "rgb(208, 235, 199)";
+      }
+      else{
+        el.style.backgroundColor = "rgb(108, 135, 99)";
+      }
+      el.innerText = String(g[nr]);
+
+    }
     for (var i = 0; i < path.length-1; i++){
       nr = path[i];
       var strnr = String(nr);
@@ -184,21 +222,21 @@ function update(evt){
     item.value = container.value;
     item.style.backgroundColor ="rgb(32, 126, 150)";
     container.value = 2;
-    container.start = [item.x, item.y];
-    reset_path();
+    container.start = item.x * 16 + item.y;
+    reset_grid();
     return 0
   }
   else if(container.value == 1) {
     item.style.backgroundColor ="rgb(32, 126, 150)";
     item.value = container.value;
     container.value = 2;
-    container.start = [item.x, item.y];
+    container.start = item.x * 16 + item.y;
   }
   else{
     item.value = container.value;
     container.value = 3;
-    container.end = [item.x, item.y];
-    reset_path();
+    container.end = item.x * 16 + item.y;
+    reset_grid();
     show();
   }
   }
@@ -219,6 +257,9 @@ function makeRows(rows, cols) {
         cell.id = c * 16 + i;
         if (cell.value == -1){
           cell.style.backgroundColor = "rgb(0,0,0)";
+        }
+        else if (cell.value == 3){
+          cell.style.backgroundColor = "rgb(150,150,150)";
         }
         //cell.innerText = String(cell.value);
         cell.addEventListener('click', function(evt){

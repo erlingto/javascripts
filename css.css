@@ -12,18 +12,56 @@
 
 .grid-item {
     cursor: pointer;
-    width:  1em;
-    height: 1em;
+    width:  1.5em;
+    height: 1.5em;
     padding: 1em;
     border: 1px solid #ddd;
     text-align: center;
     background-color: rgb(255, 255, 255);
 
 }
-.btn {
-    background-color: gray;
-    padding: 14px 28px;
-    font-size: 16px;
-    cursor: pointer;
-    display: inline-block;
+.container {
+    margin: 0 auto;
+    max-width: 48rem;
+    width: 90%;
   }
+.btn {
+    cursor: pointer;
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    
+}
+
+.row {
+    display: flex;
+}
+
+.column {
+    flex: 50%;
+}
+
+.column-exp{
+    flex:0%;
+}
+
+.text {
+    padding-left: 1em;
+    font-size: larger;
+}
+.box-text {
+    padding-top: 1em;
+    padding-left: 0em;
+    font-size: larger;
+}
+
+.title{
+    padding-left: 0.2em;
+    font-size: xx-large;
+}

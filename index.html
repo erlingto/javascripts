@@ -1,10 +1,32 @@
 <html>
-    <div> A stjerna </div>
-    <div> velg to celler og trykk start</div>
-    <div> Den korteste veien mellom cellene vil bli markert</div>
     <head><link rel="stylesheet" href="css.css"></head>
-    <div id="grid"></div>
-    <button id="button" class="btn">Start!</button>
+    <div class="row">
+        <div class="column">
+            <div id="grid"></div>
+        </div>
+        <div class="column">
+            <div class = "title"> A stjerna </div>
+            <div class = "text"> Velg to celler og trykk start.</div>
+            <div class = "text"> Den korteste veien mellom cellene vil bli markert.</div>
+            <div class = "text"> De svakt markerte feltene er felter som er vurdert av algoritmen.</div>
+            <div class = "text"> Feltene har forskjellig vekting, mørke felter er 3 ganger så tunge å bevege seg INN i</div>
+            <br></br>
+            <div class="row">
+                <div class="column-exp">
+                    <div class = "grid-item" style ="background-color: rgb(255, 255, 255)"></div> 
+                    <div class = "grid-item" style ="background-color: rgb(150, 150, 150)"></div> 
+                    <div class = "grid-item" style ="background-color: rgb(0, 0, 0)"></div> 
+                </div>
+                <div class="column-exp" style="flex:30; padding-left: 1em;">
+                    <div class="box-text"> Vekt = 1</div> 
+                    <div class="box-text" style="padding-top: 2em;"> Vekt = 3</div>
+                    <div class="box-text" style="padding-top: 2em;"> Ugjennomtrengelig</div>
+                </div>
+            </div>
+            <br></br>
+            <button id="button" class="btn" position = "centered">Start!</button>
+        </div>
+    </div>
     <footer>
         <script src="math.js" type="text/javascript"></script>
         <script type="text/javascript" src="script.js"></script>
