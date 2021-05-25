@@ -53,10 +53,10 @@ function portal_heuristic(node, end){
   ynode = node % 16;
 
   xportal1 = Math.floor(portal1 / 16);
-  yportal1 = end % 16;
+  yportal1 = portal1 % 16;
 
   xportal2 = Math.floor(portal2 / 16);
-  yportal2 = end % 16;
+  yportal2 = portal2 % 16;
 
   distance1 = Math.abs(xportal1-xnode) + Math.abs(yportal1-ynode) + Math.abs(xend-xportal2) + Math.abs(yend-yportal2);
   distance2 = Math.abs(xportal2-xnode) + Math.abs(yportal2-ynode) + Math.abs(xend-xportal1) + Math.abs(yend-yportal1);
@@ -222,7 +222,7 @@ function start(){
     arrays = astar();
     path = arrays[0];
     closedList = arrays[1];
-    g = arrays[2]; 
+    g = arrays[2];
     for (var i = 1; i < closedList.length; i++){
       nr = closedList[i];
       var strnr = String(nr);
