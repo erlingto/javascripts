@@ -1,5 +1,13 @@
 const container = document.getElementById("grid");
 const btn = document.getElementById("button");
+var url = window.location.href;  
+var urlOrigin = url.slice(0, url.length-11);
+var url = url-urlOrigin;
+const urlLink = document.getElementById("url");
+urlLink.innerHTML = "Lights Out Game";
+urlLink.href = urlOrigin+ "/LightsOut.html"
+
+
 var path = [];
 
 const matrice = [];
