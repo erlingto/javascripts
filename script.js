@@ -3,7 +3,7 @@ const btn = document.getElementById("button");
 var url = window.location.href;  
 const urlLink = document.getElementById("url");
 urlLink.innerHTML = "Lights Out Game";
-urlLink.href = urlOrigin+ "/LightsOut"
+urlLink.href = url+ "/LightsOut"
 
 
 var path = [];
