@@ -1,9 +1,7 @@
-var url = window.location.href;  
-var urlOrigin = url.slice(0, url.length-15);
-var url = url-urlOrigin;
+
 const urlLink = document.getElementById("url");
 urlLink.innerHTML = "A Star (A*)";
-urlLink.href = urlOrigin+ "/index.html"
+urlLink.href = "https://erlingto.github.io/javascripts/"
 const btn = document.getElementById("button");
 const container = document.getElementById("grid");
 

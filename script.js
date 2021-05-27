@@ -5,7 +5,7 @@ var urlOrigin = url.slice(0, url.length-11);
 var url = url-urlOrigin;
 const urlLink = document.getElementById("url");
 urlLink.innerHTML = "Lights Out Game";
-urlLink.href = urlOrigin+ "/LightsOut.html"
+urlLink.href = urlOrigin+ "/LightsOut"
 
 
 var path = [];
