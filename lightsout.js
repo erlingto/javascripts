@@ -1,9 +1,10 @@
-
-const urlLink = document.getElementById("url");
-urlLink.innerHTML = "A Star (A*)";
-urlLink.href = "https://erlingto.github.io/javascripts/"
 const btn = document.getElementById("button");
 const container = document.getElementById("grid");
+
+function header(){
+  $("#headerHtml").load("header.html");
+}
+
 
 const matrice = [];
 const neighbours = [];
@@ -113,8 +114,8 @@ function makeRows(rows, cols) {
             cell.y = i;
             cell.value = matrice[c * dim1 + i];
             cell.id = c * dim1 + i;
-            cell.style.width = "6em";
-            cell.style.height = "5em";
+            cell.style.width = "5em";
+            cell.style.height = "4em";
             cell.style.border = "3px solid #ddd";
             cell.style.backgroundColor = "rgb(205, 132, 143)";
             //cell.innerText = String(cell.value);
@@ -126,6 +127,7 @@ function makeRows(rows, cols) {
         }
     };
 }
+header()
 makeRows(dim1,dim2);
 createTask();
 createSolveBtn();

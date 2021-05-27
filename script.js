@@ -1,10 +1,10 @@
 const container = document.getElementById("grid");
 const btn = document.getElementById("button");
-var url = window.location.href;  
-const urlLink = document.getElementById("url");
-urlLink.innerHTML = "Lights Out Game";
-urlLink.href = url+ "/LightsOut";
 
+
+function header(){
+  $("#headerHtml").load("header.html");
+}
 
 var path = [];
 
@@ -333,6 +333,6 @@ function makeRows(rows, cols) {
 };
 
 
-
+header();
 makeRows(16, 16);
 createStartBtn();
