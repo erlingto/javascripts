@@ -63,10 +63,20 @@ function move(cell){
 
 function createTask(){
     var randomCell;
-    for (var i = 0; i <20; i++){
+    for (var i = 0; i <30; i++){
         randomCell = Math.floor(Math.random() * dim1 * dim2)
         move(randomCell);
     }
+}
+
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array
 }
 
 function solve(){
@@ -78,9 +88,9 @@ function solve(){
         list_moves.push(i);
       }
     }
+    list_moves = shuffleArray(list_moves);
     var i = 0;
     var iId = setInterval(solveMove, 350);
-    var prev = undefined;
     function solveMove(){
       id = list_moves[i];
       cell = document.getElementById(id);
